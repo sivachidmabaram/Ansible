@@ -1,0 +1,11 @@
+---
+- name: Test OCI CLI
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Show OCI CLI version
+      command: oci --version
+      register: oci_version
+
+    - debug:
+        msg: "{{ oci_version.stdout }}"
