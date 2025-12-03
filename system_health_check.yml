@@ -1,0 +1,55 @@
+---
+- name: Comprehensive System Health Check
+  hosts: all
+  gather_facts: no
+
+  tasks:
+
+    - name: Check Disk Usage (df -h)
+      command: df -h
+      register: disk_usage
+
+    - name: Show Disk Usage
+      debug:
+        var: disk_usage.stdout_lines
+
+    - name: Check Kernel Version (uname -a)
+      command: uname -a
+      register: kernel_info
+
+    - name: Show Kernel Info
+      debug:
+        var: kernel_info.stdout
+
+    - name: Check System Uptime
+      command: uptime
+      register: uptime_info
+
+    - name: Show Uptime Info
+      debug:
+        var: uptime_info.stdout
+
+    - name: Check Memory Usage (free -h)
+      command: free -h
+      register: memory_info
+
+    - name: Show Memory Info
+      debug:
+        var: memory_info.stdout_lines
+
+    - name: Check CPU Information
+      command: cat /proc/cpuinfo
+      register: cpu_info
+
+    - name: Show CPU Info (first few lines)
+      debug:
+        msg: "{{ cpu_info.stdout_lines[0:5] }}"
+
+    - name: Check Running Services (systemd)
+      command: systemctl list-units --type=service --state=running
+      register: services_info
+      ignore_errors: yes
+
+    - name: Show Running Services
+      debug:
+        var: services_info.stdout_lines
