@@ -1,0 +1,21 @@
+---
+- name: Check system information
+  hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: Run df -h
+      command: df -h
+      register: disk_output
+
+    - name: Display df -h output
+      debug:
+        var: disk_output.stdout_lines
+
+    - name: Run uname -a
+      command: uname -a
+      register: uname_output
+
+    - name: Display uname -a output
+      debug:
+        var: uname_output.stdout
